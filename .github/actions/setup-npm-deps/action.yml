@@ -1,0 +1,26 @@
+name: Setup npm deps
+description: Install npm dependencies
+
+inputs:
+  NPM_AUTH_TOKEN:
+    required: true
+    description: Github reader token
+
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/action-setup@v6
+    - uses: actions/setup-node@v6
+      with:
+        node-version: 24
+        cache: 'pnpm'
+    # pnpm >= 10.33 ignorerer auth-tokens i prosjektets .npmrc, så tokenet må
+    # settes i runnerens bruker-config før install.
+    - shell: bash
+      run: pnpm config set --global "//npm.pkg.github.com/:_authToken" "$NPM_AUTH_TOKEN"
+      env:
+        NPM_AUTH_TOKEN: ${{ inputs.NPM_AUTH_TOKEN }}
+    - shell: bash
+      run: pnpm install --frozen-lockfile
+      env:
+        NPM_AUTH_TOKEN: ${{ inputs.NPM_AUTH_TOKEN }}

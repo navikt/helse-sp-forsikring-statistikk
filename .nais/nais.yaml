@@ -1,0 +1,51 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: sp-forsikring-statistikk
+  namespace: tbd
+  labels:
+    team: tbd
+spec:
+  image: {{image}}
+  port: 3000
+  ingresses:
+    - {{ingress}}
+  liveness:
+    path: /internal/isalive
+  readiness:
+    path: /internal/isready
+  replicas:
+    min: 1
+    max: 2
+  resources:
+    requests:
+      cpu: 15m
+      memory: 256Mi
+    limits:
+      memory: 512Mi
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: nodejs
+    logging:
+      destinations:
+        - id: elastic
+        - id: loki
+  azure:
+    application:
+      enabled: true
+    sidecar:
+      enabled: true
+      autoLogin: true
+      autoLoginIgnorePaths:
+        - /internal/*
+  accessPolicy:
+    outbound:
+      rules:
+        - application: sp-forsikring
+          namespace: tbd
+  env:
+    - name: SP_FORSIKRING_URL
+      value: http://sp-forsikring
+    - name: SP_FORSIKRING_SCOPE
+      value: {{scope}}

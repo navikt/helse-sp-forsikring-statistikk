@@ -1,0 +1,2 @@
+ingress: https://sp-forsikring-statistikk.intern.dev.nav.no
+scope: api://dev-gcp.tbd.sp-forsikring/.default

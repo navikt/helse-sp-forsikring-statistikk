@@ -1,0 +1,87 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 4 * * 3'
+      timezone: 'Europe/Oslo'
+
+env:
+  APP: sp-forsikring-statistikk
+  TEAM: tbd
+
+jobs:
+  test-and-lint:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - name: Installer deps
+        uses: ./.github/actions/setup-npm-deps
+        with:
+          NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+      - run: pnpm run typecheck
+      - run: pnpm run test
+
+  build:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - name: Installer deps
+        uses: ./.github/actions/setup-npm-deps
+        with:
+          NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+      - run: pnpm run build
+      - uses: nais/docker-build-push@v0
+        name: Build and push image
+        id: docker-build-push
+        with:
+          team: ${{ env.TEAM }}
+    outputs:
+      image: ${{ steps.docker-build-push.outputs.image }}
+
+  deploy-dev:
+    name: Deploy to dev
+    needs: [build, test-and-lint]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: 'write'
+    environment:
+      name: dev
+      url: https://sp-forsikring-statistikk.intern.dev.nav.no
+    steps:
+      - uses: actions/checkout@v6
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/nais.yaml
+          VARS: .nais/dev.yaml
+          VAR: 'image=${{ needs.build.outputs.image }},team=${{ env.TEAM }},app=${{ env.APP }}'
+
+  deploy-prod:
+    name: Deploy to prod
+    needs: [build, test-and-lint, deploy-dev]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: 'write'
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: production
+      url: https://sp-forsikring-statistikk.intern.nav.no
+    steps:
+      - uses: actions/checkout@v6
+      - uses: nais/deploy/actions/deploy@v2
+        env:
+          CLUSTER: prod-gcp
+          RESOURCE: .nais/nais.yaml
+          VARS: .nais/prod.yaml
+          VAR: 'image=${{ needs.build.outputs.image }},team=${{ env.TEAM }},app=${{ env.APP }}'
