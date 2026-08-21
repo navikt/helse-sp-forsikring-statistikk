@@ -7,10 +7,15 @@ on:
   schedule:
     - cron: '0 4 * * 3'
       timezone: 'Europe/Oslo'
+  workflow_dispatch:
 
 env:
   APP: sp-forsikring-statistikk
   TEAM: tbd
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
   test-and-lint:
