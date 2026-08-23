@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { logger } from "@navikt/next-logger";
 import {
   Alert,
   BodyShort,
@@ -55,6 +56,10 @@ export default function Forsikringsstatistikk() {
       }
       setData((await response.json()) as UtbetalteSummerResponse);
     } catch (error) {
+      logger.error(
+        { err: error instanceof Error ? error : new Error(String(error)) },
+        "Klarte ikke å hente statistikk",
+      );
       setFeil(error instanceof Error ? error.message : "Uventet feil.");
       setData(null);
     } finally {
