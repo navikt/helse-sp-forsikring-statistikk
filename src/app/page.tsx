@@ -24,11 +24,6 @@ function tilIsoDato(dato: Date): string {
   return `${år}-${måned}-${dag}`;
 }
 
-const kategoriTekst: Record<string, string> = {
-  KOLLEKTIV: "Kollektiv",
-  NAV_KJØPT: "Nav-kjøpt",
-};
-
 export default function Forsikringsstatistikk() {
   const [data, setData] = useState<UtbetalteSummerResponse | null>(null);
   const [laster, setLaster] = useState(false);
@@ -110,8 +105,7 @@ export default function Forsikringsstatistikk() {
             <Table zebraStripes>
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell scope="col">Forsikringstype</Table.HeaderCell>
-                  <Table.HeaderCell scope="col">Kategori</Table.HeaderCell>
+                  <Table.HeaderCell scope="col">Type</Table.HeaderCell>
                   <Table.HeaderCell scope="col" align="right">
                     I ventetid
                   </Table.HeaderCell>
@@ -125,13 +119,10 @@ export default function Forsikringsstatistikk() {
               </Table.Header>
               <Table.Body>
                 {data.perForsikringstype.map((rad) => (
-                  <Table.Row key={rad.forsikringstype}>
+                  <Table.Row key={rad.navn}>
                     <Table.HeaderCell scope="row">
-                      {rad.forsikringstype}
+                      {rad.navn}
                     </Table.HeaderCell>
-                    <Table.DataCell>
-                      {kategoriTekst[rad.kategori] ?? rad.kategori}
-                    </Table.DataCell>
                     <Table.DataCell align="right">
                       {formatKroner(rad.utbetaltIVentetid)}
                     </Table.DataCell>

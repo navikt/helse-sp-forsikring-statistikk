@@ -1,8 +1,5 @@
-export type Forsikringskategori = "KOLLEKTIV" | "NAV_KJØPT";
-
 export interface PerForsikringstype {
-  kategori: Forsikringskategori;
-  forsikringstype: string;
+  navn: string;
   utbetaltIVentetid: number;
   utbetaltUtenomVentetid: number;
   totalt: number;
