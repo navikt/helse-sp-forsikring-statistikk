@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { logger } from "@navikt/next-logger";
+import { DownloadIcon } from "@navikt/aksel-icons";
 import {
   Alert,
   BodyShort,
@@ -9,12 +10,14 @@ import {
   Button,
   DatePicker,
   Heading,
+  HStack,
   Loader,
   Table,
   useRangeDatepicker,
   VStack,
 } from "@navikt/ds-react";
 import { formatKroner } from "@/lib/format";
+import { csvFilnavn, tilCsv } from "@/lib/csv";
 import { UtbetalteSummerResponse } from "@/types";
 
 function tilIsoDato(dato: Date): string {
@@ -31,6 +34,21 @@ export default function Forsikringsstatistikk() {
 
   const { datepickerProps, fromInputProps, toInputProps, selectedRange } =
     useRangeDatepicker();
+
+  function lastNedCsv() {
+    if (!data) return;
+    const blob = new Blob([tilCsv(data)], {
+      type: "text/csv;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const lenke = document.createElement("a");
+    lenke.href = url;
+    lenke.download = csvFilnavn(data);
+    document.body.appendChild(lenke);
+    lenke.click();
+    document.body.removeChild(lenke);
+    URL.revokeObjectURL(url);
+  }
 
   async function hentStatistikk() {
     if (!selectedRange?.from || !selectedRange?.to) {
@@ -99,9 +117,20 @@ export default function Forsikringsstatistikk() {
 
         {data && !laster && (
           <VStack gap="space-8">
-            <Heading size="small" level="2">
-              Periode {data.fom} – {data.tom}
-            </Heading>
+            <HStack gap="space-16" align="center" justify="space-between" wrap>
+              <Heading size="small" level="2">
+                Periode {data.fom} – {data.tom}
+              </Heading>
+              <Button
+                type="button"
+                variant="secondary"
+                size="small"
+                icon={<DownloadIcon aria-hidden />}
+                onClick={lastNedCsv}
+              >
+                Last ned CSV
+              </Button>
+            </HStack>
             <Table zebraStripes>
               <Table.Header>
                 <Table.Row>
