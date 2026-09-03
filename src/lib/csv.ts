@@ -10,8 +10,15 @@ function escapeFelt(verdi: string): string {
   return verdi;
 }
 
+function formaterFelt(felt: string | number): string {
+  if (typeof felt === "number") {
+    return String(felt).replace(".", ",");
+  }
+  return felt;
+}
+
 function lagRad(felter: (string | number)[]): string {
-  return felter.map((felt) => escapeFelt(String(felt))).join(SKILLETEGN);
+  return felter.map((felt) => escapeFelt(formaterFelt(felt))).join(SKILLETEGN);
 }
 
 export function tilCsv(data: UtbetalteSummerResponse): string {
