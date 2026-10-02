@@ -27,3 +27,10 @@ updates:
     registries: "*"
     cooldown:
       default-days: 7
+    groups:
+      vite:
+        patterns:
+          - "vite"
+          - "vitest"
+          - "@vitest/*"
+          - "@vitejs/*"
