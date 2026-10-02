@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@navikt/aksel-icons':
-        specifier: ^7.40.0
-        version: 7.40.0
+        specifier: ^8.16.2
+        version: 8.16.2
       '@navikt/ds-css':
         specifier: ^7.40.0
         version: 7.40.0
