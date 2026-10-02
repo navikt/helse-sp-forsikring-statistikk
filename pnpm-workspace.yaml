@@ -1,0 +1,8 @@
+# Inkluder Linux binaries i lockfile selv om vi bruker macOS
+supportedArchitectures:
+  os:
+    - current
+    - linux
+  cpu:
+    - current
+    - x64
