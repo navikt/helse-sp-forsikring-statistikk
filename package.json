@@ -13,7 +13,7 @@
     "prebuild": "next telemetry disable"
   },
   "dependencies": {
-    "@navikt/aksel-icons": "^7.40.0",
+    "@navikt/aksel-icons": "^8.16.2",
     "@navikt/ds-css": "^7.40.0",
     "@navikt/ds-react": "^7.40.0",
     "@navikt/next-logger": "^5.0.0",
