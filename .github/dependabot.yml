@@ -34,3 +34,13 @@ updates:
           - "vitest"
           - "@vitest/*"
           - "@vitejs/*"
+      # Released in lockstep with identical versions (changesets "fixed" group in navikt/aksel)
+      aksel:
+        patterns:
+          - "@navikt/ds-react"
+          - "@navikt/ds-css"
+          - "@navikt/ds-tokens"
+          - "@navikt/ds-tailwind"
+          - "@navikt/aksel-icons"
+          - "@navikt/aksel"
+          - "@navikt/aksel-stylelint"
