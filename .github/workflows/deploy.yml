@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Installer deps
         uses: ./.github/actions/setup-npm-deps
         with:
@@ -40,13 +40,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Installer deps
         uses: ./.github/actions/setup-npm-deps
         with:
           NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
       - run: pnpm run build
-      - uses: nais/docker-build-push@v0
+      - uses: nais/docker-build-push@423a915c9b72edf2ba848b88171ccb0489e2a40a # v0
         name: Build and push image
         id: docker-build-push
         with:
@@ -64,8 +64,8 @@ jobs:
       name: dev
       url: https://sp-forsikring-statistikk.intern.dev.nav.no
     steps:
-      - uses: actions/checkout@v7
-      - uses: nais/deploy/actions/deploy@v3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: nais/deploy/actions/deploy@9850be311389ca754d9a9f2280615419d738c891 # v3
         env:
           CLUSTER: dev-gcp
           RESOURCE: .nais/nais.yaml
@@ -83,8 +83,8 @@ jobs:
       name: production
       url: https://sp-forsikring-statistikk.intern.nav.no
     steps:
-      - uses: actions/checkout@v7
-      - uses: nais/deploy/actions/deploy@v3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: nais/deploy/actions/deploy@9850be311389ca754d9a9f2280615419d738c891 # v3
         env:
           CLUSTER: prod-gcp
           RESOURCE: .nais/nais.yaml
