@@ -17,7 +17,7 @@
     "@navikt/ds-css": "^8.16.2",
     "@navikt/ds-react": "^8.16.2",
     "@navikt/next-logger": "^5.0.1",
-    "@navikt/oasis": "^3.7.0",
+    "@navikt/oasis": "^4.2.2",
     "next": "^16.3.6",
     "pino": "^10.3.0",
     "pino-socket": "^8.0.0",
