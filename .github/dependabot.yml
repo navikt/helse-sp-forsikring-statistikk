@@ -4,43 +4,28 @@ registries:
     type: npm-registry
     url: https://npm.pkg.github.com
     token: ${{ secrets.READER_TOKEN }}
-updates:
-  # Maintain dependencies for GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    commit-message:
-      prefix: "⬆️ "
+multi-ecosystem-groups:
+  dependencies:
     schedule:
       interval: "daily"
+    commit-message:
+      prefix: "⬆️ "
+updates:
+  - package-ecosystem: "github-actions"
+    directories:
+      - "/"
+      - "/.github/actions/*"
+    multi-ecosystem-group: "dependencies"
+    patterns: ["*"]
     cooldown:
       default-days: 7
       exclude:
         - "navikt/sykepenger-github-workflows*"
 
-  # Maintain dependencies for npm
   - package-ecosystem: "npm"
     directory: "/"
-    commit-message:
-      prefix: "⬆️ "
-    schedule:
-      interval: "daily"
+    multi-ecosystem-group: "dependencies"
+    patterns: ["*"]
     registries: "*"
     cooldown:
       default-days: 7
-    groups:
-      vite:
-        patterns:
-          - "vite"
-          - "vitest"
-          - "@vitest/*"
-          - "@vitejs/*"
-      # Released in lockstep with identical versions (changesets "fixed" group in navikt/aksel)
-      aksel:
-        patterns:
-          - "@navikt/ds-react"
-          - "@navikt/ds-css"
-          - "@navikt/ds-tokens"
-          - "@navikt/ds-tailwind"
-          - "@navikt/aksel-icons"
-          - "@navikt/aksel"
-          - "@navikt/aksel-stylelint"
